@@ -24,7 +24,14 @@ def create_blog_post(blog_post: Post, db: Session = Depends(get_db)):
 
 @router.get("/", response_model=list[Post])
 def get_blog_posts(db: Session = Depends(get_db)):
-    return JSONResponse(status_code=status.HTTP_200_OK, content={"posts": db.query(BlogPost).all()})
+    posts = db.query(BlogPost).all()
+
+    json = []
+
+    for post in posts:
+        json.append({"title": post.title, "content": post.content})
+
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"posts": json})
 
 @router.get("/{blog_post_id}", response_model=Post)
 def get_blog_post(blog_post_id: int, db: Session = Depends(get_db)):
@@ -32,6 +39,9 @@ def get_blog_post(blog_post_id: int, db: Session = Depends(get_db)):
     if post is None:
         logging.warning(f"Blog post not found: {blog_post_id}")
         raise HTTPException(status_code=404, detail="Blog post not found")
+    
+    post = {"title": post.title, "content": post.content}
+
     return JSONResponse(status_code=status.HTTP_200_OK, content={"post": post})
 
 @router.delete("/{blog_post_id}", response_model=None)
