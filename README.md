@@ -25,12 +25,12 @@ Exemplo de retorno:
     "posts":
     [
         {
-            "title": "Post 1",
-            "content": "Content 1"
+            "title": "Dragon Ball Z",
+            "content": "Ki"
         },
         {
-            "title": "Post 2",
-            "content": "Content 2"
+            "title": "Black Clover",
+            "content": "Magic"
         }
     ]
 }
@@ -43,8 +43,8 @@ Exemplo de retorno:
 {
     "post": 
     {
-        "title": "Post 1",
-        "content": "Content 1"
+        "title": "Naruto",
+        "content": "Chakra"
     }
 }
 ```
@@ -89,6 +89,23 @@ Exemplo de retorno:
 ```json
 {
     "status": "success",
+}
+```
+
+## Erros
+Em caso de erro nas requisições, o retorno será um json com a chave "detail" contendo a mensagem de erro.
+
+Um exemplo de post não encontrado seria:
+```json
+{
+    "detail": "Post not found"
+}
+```
+
+Um exemplo de post inválido seria:
+```json
+{
+    "detail": "Invalid request"
 }
 ```
 
