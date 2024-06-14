@@ -22,14 +22,13 @@ A api possui 5 endpoints:
 Exemplo de retorno:
 ```json
 {
+    "posts":
     [
         {
-            "id": 1,
             "title": "Post 1",
             "content": "Content 1"
         },
         {
-            "id": 2,
             "title": "Post 2",
             "content": "Content 2"
         }
@@ -42,8 +41,11 @@ Exemplo de retorno:
 Exemplo de retorno:
 ```json
 {
-    "title": "Post 1",
-    "content": "Content 1"
+    "post": 
+    {
+        "title": "Post 1",
+        "content": "Content 1"
+    }
 }
 ```
 
@@ -52,8 +54,15 @@ Exemplo de retorno:
 Exemplo de requisição:
 ```json
 {
-    "title": "Post 3",
-    "content": "Content 3"
+    "title": "Jujutsu Kaisen",
+    "content": "Cursed Energy"
+}
+```
+
+Exemplo de retorno:
+```json
+{
+    "status": "success",
 }
 ```
 
@@ -62,12 +71,26 @@ Exemplo de requisição:
 Exemplo de requisição:
 ```json
 {
-    "title": "Post 3",
-    "content": "Content 3"
+    "title": "Hunter x Hunter",
+    "content": "Nen"
+}
+```
+
+Exemplo de retorno:
+```json
+{
+    "status": "success",
 }
 ```
 
 - DELETE /blog/:id: Deleta um post específico
+
+Exemplo de retorno:
+```json
+{
+    "status": "success",
+}
+```
 
 ## Docs
 
