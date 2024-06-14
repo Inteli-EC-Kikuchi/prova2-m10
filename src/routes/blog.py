@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from database.models import BlogPost
 from database.database import get_db
 import logging
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 logger = logging.getLogger(__name__)
@@ -19,11 +20,11 @@ def create_blog_post(blog_post: Post, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_blog_post)
     logger.info(f"Blog post created: {blog_post}")
-    return new_blog_post
+    return JSONResponse(status_code=status.HTTP_201_CREATED, content={"status": "success"})
 
 @router.get("/", response_model=list[Post])
 def get_blog_posts(db: Session = Depends(get_db)):
-    return db.query(BlogPost).all()
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"posts": db.query(BlogPost).all()})
 
 @router.get("/{blog_post_id}", response_model=Post)
 def get_blog_post(blog_post_id: int, db: Session = Depends(get_db)):
@@ -31,32 +32,32 @@ def get_blog_post(blog_post_id: int, db: Session = Depends(get_db)):
     if post is None:
         logging.warning(f"Blog post not found: {blog_post_id}")
         raise HTTPException(status_code=404, detail="Blog post not found")
-    return post
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"post": post})
 
 @router.delete("/{blog_post_id}", response_model=None)
 def delete_blog_post(blog_post_id: int, db: Session = Depends(get_db)):
 
     if db.query(BlogPost).filter(BlogPost.id == blog_post_id).first() is None:
         logging.warning(f"Blog post not found: {blog_post_id}")
-        raise HTTPException(status_code=404, detail="Blog post not found")
+        raise HTTPException(status_code=404, detail="Post not found")
 
     db.query(BlogPost).filter(BlogPost.id == blog_post_id).delete()
     db.commit()
     logger.info(f"Blog post deleted: {blog_post_id}")
-    return
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"status": "success"})
 
 @router.put("/{blog_post_id}", response_model=Post)
 def update_blog_post(blog_post_id: int, blog_post: Post, db: Session = Depends(get_db)):
     if blog_post.title is None and blog_post.content is None:
         logging.warning(f"Title or content required")
-        raise HTTPException(status_code=400, detail="Title or content required")
+        raise HTTPException(status_code=400, detail="Invalid request")
 
     if db.query(BlogPost).filter(BlogPost.id == blog_post_id).first() is None:
         logging.warning(f"Blog post not found: {blog_post_id}")
-        raise HTTPException(status_code=404, detail="Blog post not found")
+        raise HTTPException(status_code=404, detail="Post not found")
     
     db.query(BlogPost).filter(BlogPost.id == blog_post_id).update({"title": blog_post.title, "content": blog_post.content})
 
     db.commit()
 
-    return db.query(BlogPost).filter(BlogPost.id == blog_post_id).first()
+    return JSONResponse(status_code=status.HTTP_200_OK, content={"status": "success"})
