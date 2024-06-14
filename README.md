@@ -112,3 +112,8 @@ Um exemplo de post inválido seria:
 ## Docs
 
 O framework FastAPI possui uma interface de documentação automática, que pode ser acessada em http://localhost:8000/api/docs
+
+## Demonstração
+
+Vídeo com a demonstração do projeto: https://youtu.be/PwYc_wrhsPA
+```
